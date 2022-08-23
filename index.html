@@ -1,26 +1,48 @@
 <!DOCTYPE html>
-<html lang="en" id="page">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="start.css">
+    <link rel="stylesheet" type="text/css" href="game.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Butcherman&family=Silkscreen&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
     <title>Document</title>
 </head>
-<body id="body" >
-    <div class="container">
-        <div class="start-bar" id="start-game" onclick="loadStart();">
-            <button id="init" onclick=""> start </button>
-            <button class="start" > demo </button>
+
+<body id="body" onkeydown="getKeyAndMove(event)" onkeyup="getKeyAndStop(event)">
+    
+    <div class="start-container" id="welcome">
+        <div class="name">Walking&nbsp;&nbsp; Dead</div>
+        <div class="start-bar" id="start-game">
+            <button class="start" onclick="loadStart()"> start </button>
             <button class="start"> 1 </button>
             <button class="start"> 2 </button>
             <button class="start"> <img src="start/hand.png" alt="" id="hand"> </button>
             <div class="line"></div>
         </div>
     </div>
-    <script src="start.js"></script>
+    <div class="container" >
+        <div class="player" id="player">
+            <img id="fire" src="fire-shot.png" alt="">
+            <img id="player-image" class="player-obj" src="player/p1.png" alt="">
+        </div>
+        <div class="health-bar">
+            <div id="bar1" class="bar">
+            </div>
+        </div>
+        <div class="playerAmmo">
+            <div id="ammo1" class="ammo">
+            </div>
+        </div>
+        <div class="game-over">
+            <img src="over.png" alt="" id="over">
+        </div>
+    </div>
+    <script src="game.js"></script>
 </body>
+
 </html>
