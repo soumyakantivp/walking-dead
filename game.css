@@ -1,0 +1,156 @@
+*{
+    margin: 0;
+    padding: 0;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+.container{
+    visibility: hidden;
+    background-image: url("bg2.png");
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+}
+
+.player{
+    max-width: 80px;
+    height: 60px;
+    transform-origin: 10% 60%;
+    pointer-events: none;
+}
+.player-obj{
+    width: 80px;
+}
+#fire{
+    position: absolute;
+    transform: rotate(90deg);
+    width: 20px;
+    height: auto;
+    top:28px;
+    left:68px;
+    visibility: hidden;
+}
+
+/*health bar start*/
+
+.health-bar {
+    position:absolute;
+    width: 510px;
+    height: 30px;
+    background-color: aliceblue;
+    top: 100%;
+    transform: translate(0, -50px);
+    left: 20px;    
+}
+.bar {
+    position: absolute;
+    width: 500px;
+    height: 21px;
+    background-color: rgb(235, 70, 61);
+    
+    transform: translate(0, -50%);
+    top:50%;
+
+    left: 5px;
+}
+.game-over{
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    position: absolute;  
+    visibility: hidden;
+}
+  
+
+  /*health bar end*/
+
+  /*player ammo start*/
+.playerAmmo {
+    position:absolute;
+    width: 510px;
+    height: 30px;
+    top: 100%;
+    transform: translate(0, -100px);
+    left: 20px;    
+}
+.ammo {
+    position: absolute;
+    width: 500px;
+    height: auto;
+    background-color: rgba(142, 142, 131, 0.61);
+    transform: translate(0, -50%);
+    top:50%;
+
+    left: 5px;
+}
+  /*player ammo end*/
+
+  /*start screen starts*/
+
+.start-container{
+    background-image: url("start/bg.png");
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+}
+.start-bar{
+    position: absolute;
+    top: 75%;
+    transform: translate(-50%,0%);
+    height: calc(20px + 5vw);
+    width: calc(140px + 40vw); /*620*/
+    margin-left: 50%;
+}
+.start{
+    height: calc(20px + 5vw);
+    width: calc(20px + 5vw);
+    border-radius: 50%;
+    background-color: aliceblue;
+    border: none;
+    font-family: 'Silkscreen', cursive;
+    font-size: calc(5px + 1.5vw);
+    box-shadow: 0px 0px 30px 5px rgba(211, 200, 200, 0.668);
+    display: flex;
+    float: left;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    margin-left: calc(10px + 4.75vw);
+}
+.name{
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+    font-family: 'Silkscreen', cursive;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,0%);
+    font-size: calc(20px + 5vw);
+    font-family: 'Butcherman', cursive;
+    color: red;
+    text-shadow: 0px 0px 10px rgb(252, 2, 2);
+}
+#hand{
+    height: calc(10px + 5vw);
+    width: auto;
+}
+.line{
+    position: absolute;
+    width: calc(100px + 30vw);
+    height: 3px;
+    background-color: rgb(249, 11, 11);
+    top: 50%;
+    margin-left: calc(10px + 4.75vw);
+    transform: translate(0, -50%);
+    box-shadow: 0px 0px 30px 5px rgba(255, 0, 0, 0.668);
+    z-index: -1;
+}
+
+  /*start screen ends*/

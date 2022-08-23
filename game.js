@@ -17,7 +17,7 @@ class Gun {
 var play = null;
 var player = null;
 var player1Obj = null;
-var ground = null;
+var ground = document.getElementsByClassName("container")[0];
 var onReload = null;
 var Keys = {
     up: false,
@@ -28,10 +28,10 @@ var Keys = {
 
 
 function init() {
-    //console.log(player);
+    console.log("init");
     player = document.getElementById("player");
-    ground = document.getElementsByClassName("container")[0];
-    player1Obj = new Player(player, 100, 1, new Gun(1, 10, 10));
+    
+    player1Obj = new Player(player, 100, 1, new Gun(1, 20, 20));
     onReload = false;
     player.style.position = "relative";
     player.style.left = "0px";
@@ -39,6 +39,7 @@ function init() {
     setInterval("move()", 45);
     zombieGenerator();
     ammoInit(player1Obj);
+    setInterval("checkHealth()", 45);
 }
 
 function getKeyAndMove(e) {
@@ -101,11 +102,11 @@ function moveDown() {
 }
 
 
-window.onload = init;
+//window.onload = init;
 
 // player aim logic
 
-window.addEventListener('mousemove', (event) => {
+ground.addEventListener('mousemove', (event) => {
 
     var x = event.clientX;
     var y = event.clientY;
@@ -139,7 +140,7 @@ window.addEventListener('mousemove', (event) => {
 
 // player shoot logic
 
-window.addEventListener('click', (event) => {
+ground.addEventListener('click', (event) => {
     if (!onReload) {
         var fire = document.getElementById("fire");
         fire.style.visibility = "visible";
@@ -297,7 +298,7 @@ function gameOver() {
     document.getElementById("over").style.visibility = "visible";
 }
 function zombieGenerator() {
-
+    console.log("call");
     play = setInterval(createZombie, 5000, 200 + (Math.random() * (screen.width - 200)), screen.height);
     //createZombie(600, 600);
 }
@@ -358,7 +359,7 @@ function killZombie(event) {
 
 
 // player health [bar width: 490px]
-setInterval("checkHealth()", 45);
+
 
 function checkHealth() {
     var player1Hb = document.getElementById("bar1");
@@ -384,4 +385,32 @@ function ammoInit(player) {
 function ammoUpdate(player) {
     var bullet = document.getElementById("b1" + player.gun.ammo);
     bullet.remove();
+}
+
+// start screen
+
+
+
+function openFullscreen() {
+    //console.log("in");
+    var elem = document.getElementById("body");
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
+    }
+}
+
+function loadStart() {
+    
+    openFullscreen();
+    setTimeout(function(){
+        document.getElementById("welcome").style.visibility="hidden";
+        ground.style.visibility="visible";
+        init();
+    }, 2000);
+   
+    //location.replace("game.html");
 }
