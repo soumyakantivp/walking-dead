@@ -14,6 +14,7 @@ class Gun {
         this.max_ammo = max_ammo;
     }
 }
+var level = 0;
 var play = null;
 var player = null;
 var player1Obj = null;
@@ -31,7 +32,7 @@ function init() {
     console.log("init");
     player = document.getElementById("player");
     
-    player1Obj = new Player(player, 100, 1, new Gun(1, 20, 20));
+    player1Obj = new Player(player, 100, 1, new Gun(1, 10, 10));
     onReload = false;
     player.style.position = "relative";
     player.style.left = "0px";
@@ -40,6 +41,7 @@ function init() {
     zombieGenerator();
     ammoInit(player1Obj);
     setInterval("checkHealth()", 45);
+    setTimeout("missionPassed()",30000);
 }
 
 function getKeyAndMove(e) {
@@ -188,7 +190,9 @@ class Zombie {
 }
 
 function createZombie(x, y) {
-    console.log(zombies);
+    var x =  200 + (Math.random() * (window.screen.width - 200));
+    var y =  window.screen.height;
+    //console.log(zombies);
     var zombie = document.createElement("div");
     zombie.setAttribute("id", "z" + zombieCount);
 
@@ -197,8 +201,8 @@ function createZombie(x, y) {
     zombie.style.position = "absolute";
     zombie.style.pointerEvents = "none";
     zombie.style.transformOrigin = "center";
-    zombie.style.top = x + "px";
-    zombie.style.left = y + "px";
+    zombie.style.top = y + "px";
+    zombie.style.left = x + "px";
     //zombie.style.backgroundColor = "white";
 
     var zombieImage = document.createElement("img");
@@ -211,7 +215,7 @@ function createZombie(x, y) {
     ground.appendChild(zombie);
 
     var z = new Zombie(zombie, zombieCount);
-    console.log("new zom: " + z.id);
+    //console.log("new zom: " + z.id);
     var rid = setInterval(rotateZombie, 40, z, player);
     var mid = setInterval(moveZombie, 40, z, player);
 
@@ -282,24 +286,53 @@ function moveZombie(zombie, target) {
 
         player1Obj.health -= 1;
         console.log(player1Obj.health);
-        if (player1Obj.health <= 0) {
-            gameOver();
-            for (var i = 0; i < zombies.length; i++) {
-                zombies[i].ele.remove();
-            }
-        }
+        isGameOver();
+        
     }
     zombie.ele.style.top = newy + "px";
     zombie.ele.style.left = newx + "px";
 }
 
-function gameOver() {
+// game logics
+function missionPassed(){
     clearInterval(play);
-    document.getElementById("over").style.visibility = "visible";
+    setInterval("checkMissionPassed()", 100);
+    
+}
+function checkMissionPassed(){
+    // count zombies
+    
+    if(zombieCount == 0 && player1Obj.health>0){
+        var passed = document.getElementById("mission-passed");
+        passed.style.visibility="visible";
+        //for (var i = 0; i < zombies.length; i++) {
+        //   zombies[i].ele.remove();
+        //}
+    
+        setTimeout(function(){
+           location.reload();
+        }, 3000);
+    }
+    
+}
+
+function isGameOver() {
+    
+    if (player1Obj.health <= 0) {
+        clearInterval(play);
+        document.getElementById("over").style.visibility = "visible";    
+        //for (var i = 0; i < zombies.length; i++) {
+        //    zombies[i].ele.remove();
+        //}
+        setTimeout(function(){
+            location.reload();
+        }, 3000);
+    }
+    
 }
 function zombieGenerator() {
-    console.log("call");
-    play = setInterval(createZombie, 5000, 200 + (Math.random() * (screen.width - 200)), screen.height);
+
+    play = setInterval(createZombie, 400);
     //createZombie(600, 600);
 }
 
@@ -345,9 +378,9 @@ function killZombie(event) {
             clearInterval(moveIds[zombies[i].id]);
             clearInterval(rotateIds[zombies[i].id]);
             zombies[i].ele.remove();
-            console.log(zombies);
+            //console.log(zombies);
             zombies.splice(i, 1);
-            console.log(zombies);
+            //console.log(zombies);
             zombieCount--;
 
             break;
@@ -358,18 +391,21 @@ function killZombie(event) {
 
 
 
-// player health [bar width: 490px]
+// player health [bar width: 500px]
 
 
 function checkHealth() {
     var player1Hb = document.getElementById("bar1");
-    player1Hb.style.width = player1Obj.health * 5 + "px";
+    if(player1Obj.health<=0)
+        player1Hb.style.width = "0px";
+    else
+        player1Hb.style.width = player1Obj.health * 5 + "px";
 }
 
 // ammo logic
 
 function ammoInit(player) {
-    console.log("in");
+
     var player1Ammo = document.getElementById("ammo1");
     for (var i = 0; i < player.gun.ammo; i++) {
         var bullet = document.createElement("img");
