@@ -20,6 +20,10 @@ var player = null;
 var player1Obj = null;
 var ground = document.getElementsByClassName("container")[0];
 var onReload = null;
+var startTime = null;
+var healthCount = null;
+var freezeCount = null;
+var freezefactor = null;
 var Keys = {
     up: false,
     down: false,
@@ -31,7 +35,10 @@ var Keys = {
 function init() {
     console.log("init");
     player = document.getElementById("player");
-
+    healthCount = 1;
+    freezefactor = 1;
+    freezeCount = 1;
+    startTime = new Date().getTime();
     player1Obj = new Player(player, 100, 1, new Gun(1, 10, 10));
     onReload = false;
     player.style.position = "relative";
@@ -267,8 +274,8 @@ function moveZombie(zombie, target) {
     var y2 = parseInt(zombie.ele.offsetTop);
     var x2 = parseInt(zombie.ele.offsetLeft);
 
-    var dy = (y1 - y2) / 1000.0;
-    var dx = (x1 - x2) / 1000.0;
+    var dy = (y1 - y2) / (freezefactor*1000.0);
+    var dx = (x1 - x2) / (freezefactor*1000.0);
     if (dy < 1 || dx < 1) {
         dy *= 3;
         dx *= 3;
@@ -358,23 +365,38 @@ function killZombie(event) {
         var zx = zombies[i].ele.offsetLeft + 50;
         var zy = zombies[i].ele.offsetTop + 50;
         var d = Math.abs((a * zx) + (b * zy) + c) / Math.sqrt((a * a) + (b * b));
-        if (playerX - zx > 5 || playerY - zy > 5) {
-            if (!((playerX <= aimX && playerX <= zx) || (playerY <= aimY && playerY <= zy) || (playerX >= aimX && playerX >= zx) || (playerY >= aimY && playerY >= zy)))
+        //console.log((playerX - zx)+" "+(playerY - zy));
+        if (Math.abs(playerX - zx) > 5 && Math.abs(playerY - zy) > 5) {
+            //console.log("into");
+            if (!(((playerX <= aimX && playerX <= zx) || (playerX >= aimX && playerX >= zx)) && ((playerY >= aimY && playerY >= zy) || (playerY <= aimY && playerY <= zy)))) {
+                //console.log("into 2");
                 continue;
+            }
+
         }
 
         if (d < 35) {
-            var zi = document.createElement("img");
-            zi.src = "zombie/blood.png";
-            zi.style.position = "absolute";
-            zi.style.left = (zx - 50) + "px";
-            zi.style.top = (zy - 50) + "px";
-            zi.style.height = "100px";
-            zi.style.width = "100px";
-            zi.style.zIndex = "-1";
-            zi.style.pointerEvents = "none";
-            ground.append(zi);
-
+            var curTime = new Date().getTime();
+            if (healthCount > 0 && curTime - startTime > 10000) {
+                healthCount--;
+                sendHealth(zx, zy);
+            }
+            else if (freezeCount > 0 && curTime - startTime > 20000) {
+                freezeCount--;
+                sendFreeze(zx, zy);
+            }
+            else {
+                var zi = document.createElement("img");
+                zi.src = "zombie/blood.png";
+                zi.style.position = "absolute";
+                zi.style.left = (zx - 50) + "px";
+                zi.style.top = (zy - 50) + "px";
+                zi.style.height = "100px";
+                zi.style.width = "100px";
+                zi.style.zIndex = "-2";
+                zi.style.pointerEvents = "none";
+                ground.append(zi);
+            }
             clearInterval(moveIds[zombies[i].id]);
             clearInterval(rotateIds[zombies[i].id]);
             zombies[i].ele.remove();
@@ -389,7 +411,67 @@ function killZombie(event) {
     }
 }
 
+// send health
 
+function sendHealth(zx, zy) {
+    var health = document.createElement("img");
+    health.src = "game/health.gif";
+    health.style.position = "absolute";
+    health.style.left = (zx - 50) + "px";
+    health.style.top = (zy - 50) + "px";
+    health.style.height = "100px";
+    health.style.width = "100px";
+    health.style.zIndex = "-1";
+    health.style.pointerEvents = "none";
+    ground.append(health);
+    var check = null;
+    check = setInterval(function () {
+        var px = player.offsetLeft;
+        var py = player.offsetTop;
+        console.log(Math.abs(px - zx + 50) + Math.abs(py - zy + 50));
+        if (Math.abs(px - zx + 50) + Math.abs(py - zy + 50) < 100) {
+            player1Obj.health = 100;
+            clearInterval(check);
+            health.remove();
+        }
+    }, 50);
+    setTimeout(function () {
+        clearInterval(check);
+        health.remove();
+    }, 10000);
+}
+
+// send freeze
+
+function sendFreeze(zx, zy) {
+    var freeze = document.createElement("img");
+    freeze.src = "game/freeze.gif";
+    freeze.style.position = "absolute";
+    freeze.style.left = (zx - 50) + "px";
+    freeze.style.top = (zy - 50) + "px";
+    freeze.style.height = "80px";
+    freeze.style.width = "80px";
+    freeze.style.zIndex = "-1";
+    freeze.style.pointerEvents = "none";
+    ground.append(freeze);
+    var check = null;
+    check = setInterval(function () {
+        var px = player.offsetLeft;
+        var py = player.offsetTop;
+        console.log(Math.abs(px - zx + 50) + Math.abs(py - zy + 50));
+        if (Math.abs(px - zx + 50) + Math.abs(py - zy + 50) < 100) {
+            freezefactor = 50;
+            setTimeout(function () {
+                freezefactor = 1;
+            }, 4000);
+            freeze.remove();
+        }
+    }, 50);
+    setTimeout(function () {
+        clearInterval(check);
+        freeze.remove();
+    }, 10000);
+}
 
 // player health [bar width: 500px]
 
