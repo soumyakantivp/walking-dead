@@ -162,3 +162,18 @@
 }
 
   /*start screen ends*/
+
+  /*demo starts*/
+#demo{
+    position: absolute;
+    width:auto;
+    z-index: 2;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-40%);
+    visibility: hidden;
+}
+#demo-image{
+    max-height: 70vh;
+}
+  /*demo ends*/

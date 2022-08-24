@@ -311,7 +311,7 @@ function checkMissionPassed() {
 
         setTimeout(function () {
             location.reload();
-        }, 3000);
+        }, 5000);
     }
 
 }
@@ -326,7 +326,7 @@ function isGameOver() {
         //}
         setTimeout(function () {
             location.reload();
-        }, 3000);
+        }, 5000);
     }
 
 }
@@ -441,16 +441,19 @@ function openFullscreen() {
 
 function loadStart() {
     console.log(window.screen.width);
+    var demo = document.getElementById("demo");
     if (window.screen.width < 1000) {
         window.alert("please use laptop/desktop");
     }
     else {
         openFullscreen();
+        demo.style.visibility = "visible";
         setTimeout(function () {
             document.getElementById("welcome").style.visibility = "hidden";
+            demo.style.visibility = "hidden";
             ground.style.visibility = "visible";
             init();
-        }, 2000);
+        }, 5000);
     }
     //location.replace("game.html");
 }
