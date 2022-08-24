@@ -31,7 +31,7 @@ var Keys = {
 function init() {
     console.log("init");
     player = document.getElementById("player");
-    
+
     player1Obj = new Player(player, 100, 1, new Gun(1, 10, 10));
     onReload = false;
     player.style.position = "relative";
@@ -41,7 +41,7 @@ function init() {
     zombieGenerator();
     ammoInit(player1Obj);
     setInterval("checkHealth()", 45);
-    setTimeout("missionPassed()",30000);
+    setTimeout("missionPassed()", 30000);
 }
 
 function getKeyAndMove(e) {
@@ -151,7 +151,7 @@ ground.addEventListener('click', (event) => {
 
         setTimeout(stopFire, 100);
         player1Obj.gun.ammo -= 1;
-        if(player1Obj.gun.ammo == 0){
+        if (player1Obj.gun.ammo == 0) {
             onReload = true;
             setTimeout(finishReload, 2000, player1Obj);
         }
@@ -160,7 +160,7 @@ ground.addEventListener('click', (event) => {
     }
 });
 
-function finishReload(player){
+function finishReload(player) {
     onReload = false;
     player.gun.ammo = player.gun.max_ammo;
     ammoInit(player);
@@ -190,8 +190,8 @@ class Zombie {
 }
 
 function createZombie(x, y) {
-    var x =  200 + (Math.random() * (window.screen.width - 200));
-    var y =  window.screen.height;
+    var x = 200 + (Math.random() * (window.screen.width - 200));
+    var y = window.screen.height;
     //console.log(zombies);
     var zombie = document.createElement("div");
     zombie.setAttribute("id", "z" + zombieCount);
@@ -287,48 +287,48 @@ function moveZombie(zombie, target) {
         player1Obj.health -= 1;
         console.log(player1Obj.health);
         isGameOver();
-        
+
     }
     zombie.ele.style.top = newy + "px";
     zombie.ele.style.left = newx + "px";
 }
 
 // game logics
-function missionPassed(){
+function missionPassed() {
     clearInterval(play);
     setInterval("checkMissionPassed()", 100);
-    
+
 }
-function checkMissionPassed(){
+function checkMissionPassed() {
     // count zombies
-    
-    if(zombieCount == 0 && player1Obj.health>0){
+
+    if (zombieCount == 0 && player1Obj.health > 0) {
         var passed = document.getElementById("mission-passed");
-        passed.style.visibility="visible";
+        passed.style.visibility = "visible";
         //for (var i = 0; i < zombies.length; i++) {
         //   zombies[i].ele.remove();
         //}
-    
-        setTimeout(function(){
-           location.reload();
-        }, 3000);
-    }
-    
-}
 
-function isGameOver() {
-    
-    if (player1Obj.health <= 0) {
-        clearInterval(play);
-        document.getElementById("over").style.visibility = "visible";    
-        //for (var i = 0; i < zombies.length; i++) {
-        //    zombies[i].ele.remove();
-        //}
-        setTimeout(function(){
+        setTimeout(function () {
             location.reload();
         }, 3000);
     }
-    
+
+}
+
+function isGameOver() {
+
+    if (player1Obj.health <= 0) {
+        clearInterval(play);
+        document.getElementById("over").style.visibility = "visible";
+        //for (var i = 0; i < zombies.length; i++) {
+        //    zombies[i].ele.remove();
+        //}
+        setTimeout(function () {
+            location.reload();
+        }, 3000);
+    }
+
 }
 function zombieGenerator() {
 
@@ -396,7 +396,7 @@ function killZombie(event) {
 
 function checkHealth() {
     var player1Hb = document.getElementById("bar1");
-    if(player1Obj.health<=0)
+    if (player1Obj.health <= 0)
         player1Hb.style.width = "0px";
     else
         player1Hb.style.width = player1Obj.health * 5 + "px";
@@ -440,13 +440,17 @@ function openFullscreen() {
 }
 
 function loadStart() {
-    
-    openFullscreen();
-    setTimeout(function(){
-        document.getElementById("welcome").style.visibility="hidden";
-        ground.style.visibility="visible";
-        init();
-    }, 2000);
-   
+    console.log(window.screen.width);
+    if (window.screen.width < 1000) {
+        window.alert("please use laptop/desktop");
+    }
+    else {
+        openFullscreen();
+        setTimeout(function () {
+            document.getElementById("welcome").style.visibility = "hidden";
+            ground.style.visibility = "visible";
+            init();
+        }, 2000);
+    }
     //location.replace("game.html");
 }
