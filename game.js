@@ -185,23 +185,21 @@ var zombies = [];
 var moveIds = [];
 var rotateIds = [];
 var zombieCount = 0;
-
+var zombieType = ["zombie/z.gif", "zombie/z2.gif", "zombie/b1.gif", "zombie/a1.gif"];
 class Zombie {
     constructor(e, id) {
         this.ele = e;
         this.id = id;
     }
-    setType(t) {
-        this.type = t;
-    }
 }
 
+var zombieId = null;
 function createZombie(x, y) {
     var x = 200 + (Math.random() * (window.screen.width - 200));
     var y = window.screen.height;
     //console.log(zombies);
     var zombie = document.createElement("div");
-    zombie.setAttribute("id", "z" + zombieCount);
+    zombie.setAttribute("id", "z" + zombieId);
 
     zombie.style.maxWidth = "100px";
     zombie.style.maxHeight = "100px";
@@ -213,15 +211,18 @@ function createZombie(x, y) {
     //zombie.style.backgroundColor = "white";
 
     var zombieImage = document.createElement("img");
-    zombieImage.setAttribute("id", "zi" + zombieCount);
-    zombieImage.src = "zombie/z.gif";
+    zombieImage.setAttribute("id", "zi" + zombieId);
+    var zid = Math.floor(Math.random()*level);
+    if(zid == 1)
+        zombieImage.style.transform = "rotate(-90deg)"; 
+    zombieImage.src = zombieType[zid];
     zombieImage.style.maxWidth = "100px";
     zombieImage.style.maxHeight = "100px";
 
     zombie.appendChild(zombieImage);
     ground.appendChild(zombie);
 
-    var z = new Zombie(zombie, zombieCount);
+    var z = new Zombie(zombie, zombieId);
     //console.log("new zom: " + z.id);
     var rid = setInterval(rotateZombie, 40, z, player);
     var mid = setInterval(moveZombie, 40, z, player);
@@ -230,6 +231,7 @@ function createZombie(x, y) {
     moveIds.push(mid);
     rotateIds.push(rid);
     zombieCount++;
+    zombieId++;
 }
 
 function rotateZombie(zombie, target) {
@@ -339,7 +341,7 @@ function isGameOver() {
 }
 function zombieGenerator() {
 
-    play = setInterval(createZombie, 400);
+    play = setInterval(createZombie, 450-(50*level));
     //createZombie(600, 600);
 }
 
@@ -523,6 +525,7 @@ function openFullscreen() {
 
 function loadStart() {
     console.log(window.screen.width);
+    level = 1;
     var demo = document.getElementById("demo");
     if (window.screen.width < 1000) {
         window.alert("please use laptop/desktop");
@@ -530,6 +533,27 @@ function loadStart() {
     else {
         openFullscreen();
         demo.style.visibility = "visible";
+        setTimeout(function () {
+            document.getElementById("welcome").style.visibility = "hidden";
+            demo.style.visibility = "hidden";
+            ground.style.visibility = "visible";
+            init();
+        }, 5000);
+    }
+    //location.replace("game.html");
+}
+
+function loadLevel1() {
+    console.log(window.screen.width);
+    level = 2;
+    var demo = document.getElementById("demo");
+    if (window.screen.width < 1000) {
+        window.alert("please use laptop/desktop");
+    }
+    else {
+        openFullscreen();
+        demo.style.visibility = "visible";
+        ground.style.backgroundImage = "url('level1/bg.png')";
         setTimeout(function () {
             document.getElementById("welcome").style.visibility = "hidden";
             demo.style.visibility = "hidden";
