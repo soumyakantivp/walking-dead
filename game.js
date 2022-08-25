@@ -213,13 +213,13 @@ function createZombie(x, y) {
 
     var zombieImage = document.createElement("img");
     zombieImage.setAttribute("id", "zi" + zombieId);
-    var zid = Math.floor(Math.random()*level);
-    if(zid == 1)
-        zombieImage.style.transform = "rotate(-90deg)"; 
-    if(zid == 2)
-        zombieImage.style.transform = "rotate(90deg)"; 
-    if(zid == 3)
-        zombieImage.style.transform = "rotate(90deg)"; 
+    var zid = Math.floor(Math.random() * level);
+    if (zid == 1)
+        zombieImage.style.transform = "rotate(-90deg)";
+    if (zid == 2)
+        zombieImage.style.transform = "rotate(90deg)";
+    if (zid == 3)
+        zombieImage.style.transform = "rotate(90deg)";
     zombieImage.src = zombieType[zid];
     zombieImage.style.maxWidth = "100px";
     zombieImage.style.maxHeight = "100px";
@@ -276,23 +276,36 @@ function moveZombie(zombie, target) {
     // run towards target
     //target.style.backgroundColor = "red";
     //zombie.ele.style.backgroundColor = "white";
-    var y1 = target.offsetTop;
-    var x1 = target.offsetLeft - 40;
-    var y2 = parseInt(zombie.ele.offsetTop);
-    var x2 = parseInt(zombie.ele.offsetLeft);
-    var typeFactor = (zombie.type/4.0)+1;
-    var dy = (typeFactor*(y1 - y2)) / (freezefactor*1000.0);
-    var dx = (typeFactor*(x1 - x2)) / (freezefactor*1000.0);
-    if (dy < 1 || dx < 1) {
-        dy *= 3;
-        dx *= 3;
+    var y1 = target.offsetTop + 30;
+    var x1 = target.offsetLeft + 20; //-40px
+    var y2 = zombie.ele.offsetTop + 50;
+    var x2 = zombie.ele.offsetLeft + 50;
+
+    //console.log((y1 - y2)+" "+(x1 - x2));
+    var typeFactor = (zombie.type / 4.0) + 1;
+    var dy = (typeFactor * (y1 - y2)) / (freezefactor * 100.0);
+    var dx = (typeFactor * (x1 - x2)) / (freezefactor * 100.0);
+    /*
+    if (Math.abs(dy) < 0.2 || Math.abs(dx) < 0.2) {
+        dy *= 4;
+        dx *= 4;
     }
-    if (dy < 0.2 || dx < 0.2) {
-        dy *= 5;
-        dx *= 5;
+    if (Math.abs(dy) < 0.5 || Math.abs(dx) < 0.5) {
+        dy *= 1.5;
+        dx *= 1.5;
     }
+    if (Math.abs(dy) < 1 || Math.abs(dx) < 1) {
+        dy *= 1.5;
+        dx *= 1.5;
+    }*/
 
 
+
+    while (Math.abs(dy) < 1 && Math.abs(dx) < 1 && freezefactor==1) {
+        dy *= 2;
+        dx *= 2;
+    }
+    //console.log(dy + " " + dx+" "+freezefactor);
     var newy = y2 + dy;
     var newx = x2 + dx;
     if (Math.abs(y1 - y2) + Math.abs(x1 - x2) < 70) {
@@ -303,8 +316,8 @@ function moveZombie(zombie, target) {
         isGameOver();
 
     }
-    zombie.ele.style.top = newy + "px";
-    zombie.ele.style.left = newx + "px";
+    zombie.ele.style.top = (newy - 50) + "px";
+    zombie.ele.style.left = (newx - 50) + "px";
 }
 
 // game logics

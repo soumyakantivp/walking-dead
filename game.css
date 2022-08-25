@@ -178,3 +178,15 @@
     max-height: 70vh;
 }
   /*demo ends*/
+
+  /*danger starts*/
+.death-zone{
+    position: absolute;
+    left: 3px;
+    top: 3px;
+}
+.death-image{
+    height: 100px;
+    width: auto;
+}
+  /*danger ends*/
