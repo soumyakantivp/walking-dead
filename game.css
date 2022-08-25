@@ -15,6 +15,7 @@
 }
 
 .player{
+    position: absolute;
     max-width: 80px;
     height: 60px;
     transform-origin: 10% 60%;
