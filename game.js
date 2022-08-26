@@ -33,7 +33,7 @@ var Keys = {
 
 
 function init() {
-    console.log("init");
+    //console.log("init");
     player = document.getElementById("player");
     healthCount = 1;
     freezefactor = 1;
@@ -47,7 +47,8 @@ function init() {
     setInterval("move()", 45);
     zombieGenerator();
     ammoInit(player1Obj);
-    setInterval("checkHealth()", 45);
+    setInterval("checkHealth()", 100);
+    setInterval("isGameOver()",100);
     setTimeout("missionPassed()", 30000);
 }
 
@@ -285,42 +286,25 @@ function moveZombie(zombie, target) {
     var typeFactor = (zombie.type / 4.0) + 1;
     var dy = (typeFactor * (y1 - y2)) / (freezefactor * 100.0);
     var dx = (typeFactor * (x1 - x2)) / (freezefactor * 100.0);
-    /*
-    if (Math.abs(dy) < 0.2 || Math.abs(dx) < 0.2) {
-        dy *= 4;
-        dx *= 4;
+    //console.log("loop in");
+    while (Math.abs(dy) < 1 && Math.abs(dx) < 1 && freezefactor==1 && !(Math.abs(dy) == 0 && Math.abs(dx) == 0)) {
+        //console.log(dx+" "+dy);
+        dy *= 5;
+        dx *= 5;
     }
-    if (Math.abs(dy) < 0.5 || Math.abs(dx) < 0.5) {
-        dy *= 1.5;
-        dx *= 1.5;
-    }
-    if (Math.abs(dy) < 1 || Math.abs(dx) < 1) {
-        dy *= 1.5;
-        dx *= 1.5;
-    }*/
-
-
-
-    while (Math.abs(dy) < 1 && Math.abs(dx) < 1 && freezefactor==1) {
-        dy *= 2;
-        dx *= 2;
-    }
-    //console.log(dy + " " + dx+" "+freezefactor);
+    //console.log("loop out");
     var newy = y2 + dy;
     var newx = x2 + dx;
     if (Math.abs(y1 - y2) + Math.abs(x1 - x2) < 70) {
         // kill player logic
-
         player1Obj.health -= 1;
-        console.log(player1Obj.health);
-        isGameOver();
-
     }
     zombie.ele.style.top = (newy - 50) + "px";
     zombie.ele.style.left = (newx - 50) + "px";
 }
 
 // game logics
+
 function missionPassed() {
     clearInterval(play);
     setInterval("checkMissionPassed()", 100);
@@ -448,7 +432,7 @@ function sendHealth(zx, zy) {
     check = setInterval(function () {
         var px = player.offsetLeft;
         var py = player.offsetTop;
-        console.log(Math.abs(px - zx + 50) + Math.abs(py - zy + 50));
+        //console.log(Math.abs(px - zx + 50) + Math.abs(py - zy + 50));
         if (Math.abs(px - zx + 50) + Math.abs(py - zy + 50) < 100) {
             player1Obj.health = 100;
             clearInterval(check);
@@ -478,7 +462,7 @@ function sendFreeze(zx, zy) {
     check = setInterval(function () {
         var px = player.offsetLeft;
         var py = player.offsetTop;
-        console.log(Math.abs(px - zx + 50) + Math.abs(py - zy + 50));
+        //console.log(Math.abs(px - zx + 50) + Math.abs(py - zy + 50));
         if (Math.abs(px - zx + 50) + Math.abs(py - zy + 50) < 100) {
             freezefactor = 50;
             setTimeout(function () {
@@ -542,7 +526,7 @@ function openFullscreen() {
 }
 
 function loadStart() {
-    console.log(window.screen.width);
+    //console.log(window.screen.width);
     level = 1;
     var demo = document.getElementById("demo");
     if (window.screen.width < 1000) {
@@ -562,7 +546,7 @@ function loadStart() {
 }
 
 function loadLevel1() {
-    console.log(window.screen.width);
+    //console.log(window.screen.width);
     level = 2;
     var demo = document.getElementById("demo");
     if (window.screen.width < 1000) {
@@ -583,7 +567,7 @@ function loadLevel1() {
 }
 
 function loadLevel2() {
-    console.log(window.screen.width);
+    //console.log(window.screen.width);
     level = 3;
     var demo = document.getElementById("demo");
     if (window.screen.width < 1000) {
@@ -604,7 +588,7 @@ function loadLevel2() {
 }
 
 function loadLevel3() {
-    console.log(window.screen.width);
+    //console.log(window.screen.width);
     level = 4;
     var demo = document.getElementById("demo");
     if (window.screen.width < 1000) {
